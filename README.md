@@ -1,5 +1,6 @@
 # Team members
 Marek Šádek (responsible for ...)
+
 Matěj Ševčík (responsible for ...)
 
 # Abstract
