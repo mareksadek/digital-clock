@@ -3,12 +3,12 @@
 # SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
 # IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
 # SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
-# Start of session at: Tue Apr  8 22:18:03 2025
-# Process ID         : 37136
-# Current directory  : C:/Users/matik/Documents/Repository GitSrcTree/digital_clock
-# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent15460 C:\Users\matik\Documents\Repository GitSrcTree\digital_clock\digital_clock.xpr
-# Log file           : C:/Users/matik/Documents/Repository GitSrcTree/digital_clock/vivado.log
-# Journal file       : C:/Users/matik/Documents/Repository GitSrcTree/digital_clock\vivado.jou
+# Start of session at: Wed Apr  9 12:15:50 2025
+# Process ID         : 17028
+# Current directory  : C:/Users/matik/Documents/GitHub/digital-clock/digital_clock
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent7276 C:\Users\matik\Documents\GitHub\digital-clock\digital_clock\digital_clock.xpr
+# Log file           : C:/Users/matik/Documents/GitHub/digital-clock/digital_clock/vivado.log
+# Journal file       : C:/Users/matik/Documents/GitHub/digital-clock/digital_clock\vivado.jou
 # Running On         : LAPTOP-21RP9537
 # Platform           : Windows Server 2016 or Windows 10
 # Operating System   : 26100
@@ -17,10 +17,23 @@
 # CPU Physical cores : 6
 # CPU Logical cores  : 12
 # Host memory        : 16539 MB
-# Swap memory        : 11280 MB
-# Total Virtual      : 27820 MB
-# Available Virtual  : 2849 MB
+# Swap memory        : 10200 MB
+# Total Virtual      : 26740 MB
+# Available Virtual  : 12628 MB
 #-----------------------------------------------------------
 start_gui
-open_project {C:/Users/matik/Documents/Repository GitSrcTree/digital_clock/digital_clock.xpr}
+open_project C:/Users/matik/Documents/GitHub/digital-clock/digital_clock/digital_clock.xpr
 update_compile_order -fileset sources_1
+file mkdir C:/Users/matik/Documents/GitHub/digital-clock/digital_clock/digital_clock.srcs/sim_1/new
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+close [ open C:/Users/matik/Documents/GitHub/digital-clock/digital_clock/digital_clock.srcs/sim_1/new/digital-clock_tb.vhd w ]
+add_files -fileset sim_1 C:/Users/matik/Documents/GitHub/digital-clock/digital_clock/digital_clock.srcs/sim_1/new/digital-clock_tb.vhd
+update_compile_order -fileset sim_1
+export_ip_user_files -of_objects  [get_files C:/Users/matik/Documents/GitHub/digital-clock/digital_clock/digital_clock.srcs/sim_1/new/digital-clock_tb.vhd] -no_script -reset -force -quiet
+remove_files  -fileset sim_1 C:/Users/matik/Documents/GitHub/digital-clock/digital_clock/digital_clock.srcs/sim_1/new/digital-clock_tb.vhd
+remove_files  -fileset sim_1 C:/Users/matik/Documents/GitHub/digital-clock/digital_clock/digital_clock.srcs/sim_1/new/digital-clock_tb.vhd
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+close [ open C:/Users/matik/Documents/GitHub/digital-clock/digital_clock/digital_clock.srcs/sim_1/new/tb_digital_clock.vhd w ]
+add_files -fileset sim_1 C:/Users/matik/Documents/GitHub/digital-clock/digital_clock/digital_clock.srcs/sim_1/new/tb_digital_clock.vhd
+update_compile_order -fileset sim_1
+update_compile_order -fileset sim_1
