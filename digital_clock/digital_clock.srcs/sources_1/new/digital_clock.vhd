@@ -35,7 +35,7 @@ begin
     process(clk, rst)
     begin
         if rst = '1' then
-            sec_count <= "000110";
+            sec_count <= "000000";
             min_count <= "000000";
             hr_count  <= "000000";
         elsif clk = '1' and clk'event then  -- Změna na hodinovém signálu
