@@ -38,7 +38,7 @@ begin
             sec_count <= "000000";
             min_count <= "000000";
             hr_count  <= "000000";
-        elsif clk = '1' and clk'event then  -- Změna na hodinovém signálu
+        elsif clk = '1' and clk'event then  -- Zmena na hodinovem signalu
             -- Inkrementace sekund
             if sec_count = "111011" then  -- 59 sekund
                 sec_count <= "000000";
@@ -46,7 +46,7 @@ begin
                 if min_count = "111011" then  -- 59 minut
                     min_count <= "000000";
                     -- Inkrementace hodin
-                    if (hr_count = "10111") then -- 24h režim (23)
+                    if (hr_count = "10111") then 
                         hr_count <= "000000"; -- Reset na 0
                     else
                         hr_count <= hr_count + 1;
@@ -60,13 +60,13 @@ begin
         end if;
     end process;
 
-    -- Nastavení hodin tlačítkem
+    -- Nastaveni hodin tlacitkem
     process(set_hours)
     begin
         if set_hours(0) = '1' and set_hours'event then
-            if (hr_count = "1011") then  -- 12h režim
+            if (hr_count = "1011") then  
                 hr_count <= "000001";  -- Reset na 1
-            elsif (hr_count = "10111") then  -- 24h režim
+            elsif (hr_count = "10111") then  
                 hr_count <= "000000";  -- Reset na 0
             else
                 hr_count <= hr_count + 1;
@@ -74,7 +74,7 @@ begin
         end if;
     end process;
 
-    -- Nastavení minut tlačítkem
+    -- Nastaveni minut tlacitkem
     process(set_minutes)
     begin
         if set_minutes(0) = '1' and set_minutes'event then
@@ -86,7 +86,7 @@ begin
         end if;
     end process;
 
-    -- Výstupy
+    -- Vystupy
     hours <= hr_count;
     minutes <= min_count;
     seconds <= sec_count;
