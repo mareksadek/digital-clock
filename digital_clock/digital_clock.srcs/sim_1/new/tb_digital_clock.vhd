@@ -27,97 +27,100 @@ end tb_digital_clock;
 architecture tb of tb_digital_clock is
 
     component digital_clock
-        port (clk         : in std_logic;
-              rst         : in std_logic;
-              set_hours   : in std_logic_vector (1 downto 0);
-              set_minutes : in std_logic_vector (1 downto 0);
-              hours       : out std_logic_vector (5 downto 0);
-              minutes     : out std_logic_vector (5 downto 0);
-              seconds     : out std_logic_vector (5 downto 0);
-              display     : out std_logic_vector (6 downto 0));
+        port (
+            clk         : in std_logic;
+            rst         : in std_logic;
+            set_hours   : in std_logic_vector(1 downto 0);
+            set_minutes : in std_logic_vector(1 downto 0);
+            hours       : out std_logic_vector(5 downto 0);
+            minutes     : out std_logic_vector(5 downto 0);
+            seconds     : out std_logic_vector(5 downto 0);
+            display     : out std_logic_vector(6 downto 0)
+        );
     end component;
 
-    signal clk         : std_logic;
+    -- Signály pro připojení
+    signal clk         : std_logic := '0';
     signal rst         : std_logic;
-    signal set_hours   : std_logic_vector (1 downto 0);
-    signal set_minutes : std_logic_vector (1 downto 0);
-    signal hours       : std_logic_vector (5 downto 0);
-    signal minutes     : std_logic_vector (5 downto 0);
-    signal seconds     : std_logic_vector (5 downto 0);
-    signal display     : std_logic_vector (6 downto 0);
+    signal set_hours   : std_logic_vector(1 downto 0);
+    signal set_minutes : std_logic_vector(1 downto 0);
+    signal hours       : std_logic_vector(5 downto 0);
+    signal minutes     : std_logic_vector(5 downto 0);
+    signal seconds     : std_logic_vector(5 downto 0);
+    signal display     : std_logic_vector(6 downto 0);
 
-    constant TbPeriod : time := 100 ns; -- 
-    signal TbClock : std_logic := '0';
-    signal TbSimEnded : std_logic := '0';
+    constant TbPeriod : time := 100 ns;
+    signal TbSimEnded : boolean := false;
 
 begin
 
-    dut : digital_clock
-    port map (clk         => clk,
-              rst         => rst,
-              set_hours   => set_hours,
-              set_minutes => set_minutes,
-              hours       => hours,
-              minutes     => minutes,
-              seconds     => seconds,
-              display     => display);
+    -- Instance DUT (device under test)
+    dut: digital_clock
+        port map (
+            clk         => clk,
+            rst         => rst,
+            set_hours   => set_hours,
+            set_minutes => set_minutes,
+            hours       => hours,
+            minutes     => minutes,
+            seconds     => seconds,
+            display     => display
+        );
 
-    -- Clock generation
-    TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
+    -- Generování hodinového signálu
+    clk_process : process
+    begin
+        while not TbSimEnded loop
+            clk <= '0';
+            wait for TbPeriod / 2;
+            clk <= '1';
+            wait for TbPeriod / 2;
+        end loop;
+        wait;
+    end process;
 
-    -- ***EDIT*** Check that clk is really your main clock signal
-    clk <= TbClock;
-
+    -- Stimuly
     stimuli : process
     begin
-    -- Inicializace
-    set_hours   <= (others => '0');
-    set_minutes <= (others => '0');
+        -- Inicializace signálů
+        set_hours   <= (others => '0');
+        set_minutes <= (others => '0');
+        rst <= '1';
+        wait for 100 ns;
+        rst <= '0';
 
-    -- Reset
-    rst <= '1';
-    wait for 100 ns;
-    rst <= '0';
-    wait for 200 ns;
+        -- Nech hodiny běžet 2 sekundy
+        wait for 2 sec;
 
-    -- Simulace běhu hodin na 1 minutu (zrychlená simulace)
-    wait for 70 * TbPeriod;
+        -- Simuluj stisknutí tlačítka pro přidání jedné hodiny
+        set_hours(0) <= '1';
+        wait for TbPeriod;
+        set_hours(0) <= '0';
 
-    -- Nastavení hodin tlačítkem
-    set_hours(0) <= '1';
-    wait for TbPeriod;
-    set_hours(0) <= '0';
-    wait for 5 * TbPeriod;
+        wait for 1 sec;
 
-    -- Nastavení minut tlačítkem
-    set_minutes(0) <= '1';
-    wait for TbPeriod;
-    set_minutes(0) <= '0';
-    wait for 5 * TbPeriod;
+        -- Simuluj stisknutí tlačítka pro přidání jedné minuty
+        set_minutes(0) <= '1';
+        wait for TbPeriod;
+        set_minutes(0) <= '0';
 
-    -- Další kliknutí na tlačítka
-    set_hours(0) <= '1';
-    wait for TbPeriod;
-    set_hours(0) <= '0';
-    wait for 5 * TbPeriod;
+        wait for 2 sec;
 
-    set_minutes(0) <= '1';
-    wait for TbPeriod;
-    set_minutes(0) <= '0';
+        -- Další kliknutí pro test
+        set_hours(0) <= '1';
+        wait for TbPeriod;
+        set_hours(0) <= '0';
 
-    -- Simulace chodu po změně času
-    wait for 50 * TbPeriod;
+        set_minutes(0) <= '1';
+        wait for TbPeriod;
+        set_minutes(0) <= '0';
 
-    -- Ukončení simulace
-    TbSimEnded <= '1';
-    wait;
-end process;
+        -- Nech doběhnout několik sekund
+        wait for 2 sec;
+
+        -- Ukonči simulaci
+        TbSimEnded <= true;
+        wait;
+    end process;
 
 end tb;
-
--- Configuration block below is required by some simulators. Usually no need to edit.
-
-configuration cfg_tb_digital_clock of tb_digital_clock is
-    for tb
-    end for;
-end cfg_tb_digital_clock;
