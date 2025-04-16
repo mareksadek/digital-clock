@@ -10,11 +10,11 @@ An abstract is a short summary of your project, usually about a paragraph (6-7 s
 
 The main contributions of the project are:
 
-Marek Šádek for
+• Marek Šádek for
 
-Matěj Ševčík for
+• Matěj Ševčík for
 
-Denis Bandura for
+• Denis Bandura for
 
 [Photo(s) of your application with labels of individual parts.]
 
