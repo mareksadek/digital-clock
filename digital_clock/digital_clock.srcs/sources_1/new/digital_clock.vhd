@@ -38,16 +38,16 @@ begin
             sec_count <= "000000";
             min_count <= "000000";
             hr_count  <= "000000";
-        elsif clk = '1' and clk'event then  -- Změna na hodinovém signálu
-            -- Inkrementace sekund
-            if sec_count = "111011" then  -- 59 sekund
+        elsif clk = '1' and clk'event then  -- Change of hour signal
+            -- Increment seconds
+            if sec_count = "111011" then  -- 59 seconds
                 sec_count <= "000000";
-                -- Inkrementace minut
-                if min_count = "111011" then  -- 59 minut
+                -- Increment minutes
+                if min_count = "111011" then  -- 59 minutes
                     min_count <= "000000";
-                    -- Inkrementace hodin
-                    if (hr_count = "10111") then -- 24h režim (23)
-                        hr_count <= "000000"; -- Reset na 0
+                    -- Increment hours
+                    if (hr_count = "10111") then 
+                        hr_count <= "000000"; -- Reset to 0
                     else
                         hr_count <= hr_count + 1;
                     end if;
@@ -60,25 +60,25 @@ begin
         end if;
     end process;
 
-    -- Nastavení hodin tlačítkem
+    -- Set hours
     process(set_hours)
     begin
         if set_hours(0) = '1' and set_hours'event then
-            if (hr_count = "1011") then  -- 12h režim
-                hr_count <= "000001";  -- Reset na 1
-            elsif (hr_count = "10111") then  -- 24h režim
-                hr_count <= "000000";  -- Reset na 0
+            if (hr_count = "1011") then  
+                hr_count <= "000001";  -- Reset to 1
+            elsif (hr_count = "10111") then  
+                hr_count <= "000000";  -- Reset to 0
             else
                 hr_count <= hr_count + 1;
             end if;
         end if;
     end process;
 
-    -- Nastavení minut tlačítkem
+    -- set minutes 
     process(set_minutes)
     begin
         if set_minutes(0) = '1' and set_minutes'event then
-            if min_count = "111011" then  -- 59 minut
+            if min_count = "111011" then  -- 59 minutes
                 min_count <= "000000";
             else
                 min_count <= min_count + 1;
@@ -86,7 +86,7 @@ begin
         end if;
     end process;
 
-    -- Výstupy
+    -- Outputs
     hours <= hr_count;
     minutes <= min_count;
     seconds <= sec_count;
