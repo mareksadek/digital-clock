@@ -17,6 +17,10 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
+-- Testbench automatically generated online
+-- at https://vhdl.lapinoo.net
+-- Generation date : Wed, 16 Apr 2025 10:18:44 GMT
+-- Request id : cfwk-fed377c2-67ff84045c40b
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -27,100 +31,73 @@ end tb_digital_clock;
 architecture tb of tb_digital_clock is
 
     component digital_clock
-        port (
-            clk         : in std_logic;
-            rst         : in std_logic;
-            set_hours   : in std_logic_vector(1 downto 0);
-            set_minutes : in std_logic_vector(1 downto 0);
-            hours       : out std_logic_vector(5 downto 0);
-            minutes     : out std_logic_vector(5 downto 0);
-            seconds     : out std_logic_vector(5 downto 0);
-            display     : out std_logic_vector(6 downto 0)
-        );
+        port (clk         : in std_logic;
+              rst         : in std_logic;
+              set_hours   : in std_logic_vector (1 downto 0);
+              set_minutes : in std_logic_vector (1 downto 0);
+              hours       : out std_logic_vector (5 downto 0);
+              minutes     : out std_logic_vector (5 downto 0);
+              seconds     : out std_logic_vector (5 downto 0);
+              display     : out std_logic_vector (6 downto 0));
     end component;
 
-    -- Signály pro připojení
-    signal clk         : std_logic := '0';
+    signal clk         : std_logic;
     signal rst         : std_logic;
-    signal set_hours   : std_logic_vector(1 downto 0);
-    signal set_minutes : std_logic_vector(1 downto 0);
-    signal hours       : std_logic_vector(5 downto 0);
-    signal minutes     : std_logic_vector(5 downto 0);
-    signal seconds     : std_logic_vector(5 downto 0);
-    signal display     : std_logic_vector(6 downto 0);
+    signal set_hours   : std_logic_vector (1 downto 0);
+    signal set_minutes : std_logic_vector (1 downto 0);
+    signal hours       : std_logic_vector (5 downto 0);
+    signal minutes     : std_logic_vector (5 downto 0);
+    signal seconds     : std_logic_vector (5 downto 0);
+    signal display     : std_logic_vector (6 downto 0);
 
-    constant TbPeriod : time := 100 ns;
-    signal TbSimEnded : boolean := false;
+    constant TbPeriod : time := 1000 ns; -- ***EDIT*** Put right period here
+    signal TbClock : std_logic := '0';
+    signal TbSimEnded : std_logic := '0';
 
 begin
 
-    -- Instance DUT (device under test)
-    dut: digital_clock
-        port map (
-            clk         => clk,
-            rst         => rst,
-            set_hours   => set_hours,
-            set_minutes => set_minutes,
-            hours       => hours,
-            minutes     => minutes,
-            seconds     => seconds,
-            display     => display
-        );
+    dut : digital_clock
+    port map (clk         => clk,
+              rst         => rst,
+              set_hours   => set_hours,
+              set_minutes => set_minutes,
+              hours       => hours,
+              minutes     => minutes,
+              seconds     => seconds,
+              display     => display);
 
-    -- Generování hodinového signálu
-    clk_process : process
-    begin
-        while not TbSimEnded loop
-            clk <= '0';
-            wait for TbPeriod / 2;
-            clk <= '1';
-            wait for TbPeriod / 2;
-        end loop;
-        wait;
-    end process;
+    -- Clock generation
+    TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
 
-    -- Stimuly
+    -- Clock main signal
+    clk <= TbClock;
+
     stimuli : process
     begin
-        -- Inicializace signálů
-        set_hours   <= (others => '0');
+        -- ***EDIT*** Adapt initialization as needed
+        set_hours <= (others => '0');
         set_minutes <= (others => '0');
+
+        -- Reset generation
+        -- ***EDIT*** Check that rst is really your reset signal
         rst <= '1';
         wait for 100 ns;
         rst <= '0';
+        wait for 100 ns;
 
-        -- Nech hodiny běžet 2 sekundy
-        wait for 2 sec;
+        -- ***EDIT*** Add stimuli here
+        wait for 100 * TbPeriod;
 
-        -- Simuluj stisknutí tlačítka pro přidání jedné hodiny
-        set_hours(0) <= '1';
-        wait for TbPeriod;
-        set_hours(0) <= '0';
-
-        wait for 1 sec;
-
-        -- Simuluj stisknutí tlačítka pro přidání jedné minuty
-        set_minutes(0) <= '1';
-        wait for TbPeriod;
-        set_minutes(0) <= '0';
-
-        wait for 2 sec;
-
-        -- Další kliknutí pro test
-        set_hours(0) <= '1';
-        wait for TbPeriod;
-        set_hours(0) <= '0';
-
-        set_minutes(0) <= '1';
-        wait for TbPeriod;
-        set_minutes(0) <= '0';
-
-        -- Nech doběhnout několik sekund
-        wait for 2 sec;
-
-        -- Ukonči simulaci
-        TbSimEnded <= true;
+        -- Stop the clock and hence terminate the simulation
+        TbSimEnded <= '1';
         wait;
     end process;
 
 end tb;
+
+-- Configuration block below is required by some simulators. Usually no need to edit.
+
+configuration cfg_tb_digital_clock of tb_digital_clock is
+    for tb
+    end for;
+end cfg_tb_digital_clock;

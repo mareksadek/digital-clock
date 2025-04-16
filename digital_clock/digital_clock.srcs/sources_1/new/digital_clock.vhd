@@ -27,64 +27,54 @@ entity digital_clock is
 end digital_clock;
 
 architecture Behavioral of digital_clock is
-    signal sec_count   : std_logic_vector(5 downto 0) := "000000"; -- sekundy
-    signal min_count   : std_logic_vector(5 downto 0) := "000000"; -- minuty
-    signal hr_count    : std_logic_vector(5 downto 0) := "000000"; -- hodiny
+    signal sec_count   : std_logic_vector(5 downto 0) := "000000"; -- seconds
+    signal min_count   : std_logic_vector(5 downto 0) := "000000"; -- minutes
+    signal hr_count    : std_logic_vector(5 downto 0) := "000000"; -- hours
 
 begin
-    process(clk, rst)
-    begin
-        if rst = '1' then
-            sec_count <= "000000";
-            min_count <= "000000";
-            hr_count  <= "000000";
-        elsif clk = '1' and clk'event then  -- Change of hour signal
-            -- Increment seconds
-            if sec_count = "111011" then  -- 59 seconds
-                sec_count <= "000000";
-                -- Increment minutes
-                if min_count = "111011" then  -- 59 minutes
-                    min_count <= "000000";
-                    -- Increment hours
-                    if (hr_count = "10111") then 
-                        hr_count <= "000000"; -- Reset to 0
-                    else
-                        hr_count <= hr_count + 1;
-                    end if;
+process(clk, rst)
+begin
+    if rst = '1' the
+        sec_count <= (others => '0');
+        min_count <= (others => '0');
+        hr_count  <= (others => '0');
+    elsif rising_edge(clk) then
+        -- Time update
+        if sec_count = std_logic_vector(to_unsigned(59, 6)) then
+            sec_count <= (others => '0');
+            if min_count = std_logic_vector(to_unsigned(59, 6)) then
+                min_count <= (others => '0');
+                if hr_count = std_logic_vector(to_unsigned(23, 6)) then
+                    hr_count <= (others => '0');
                 else
-                    min_count <= min_count + 1;
+                    hr_count <= hr_count + 1;
                 end if;
             else
-                sec_count <= sec_count + 1;
+                min_count <= min_count + 1;
             end if;
+        else
+            sec_count <= sec_count + 1;
         end if;
-    end process;
 
-    -- Set hours
-    process(set_hours)
-    begin
-        if set_hours(0) = '1' and set_hours'event then
-            if (hr_count = "1011") then  
-                hr_count <= "000001";  -- Reset to 1
-            elsif (hr_count = "10111") then  
-                hr_count <= "000000";  -- Reset to 0
+        -- Set Hours
+        if set_hours = "01" then
+            if hr_count = std_logic_vector(to_unsigned(23, 6)) then
+                hr_count <= (others => '0');
             else
                 hr_count <= hr_count + 1;
             end if;
         end if;
-    end process;
 
-    -- set minutes 
-    process(set_minutes)
-    begin
-        if set_minutes(0) = '1' and set_minutes'event then
-            if min_count = "111011" then  -- 59 minutes
-                min_count <= "000000";
+        -- Set Minutes
+        if set_minutes = "01" then
+            if min_count = std_logic_vector(to_unsigned(59, 6)) then
+                min_count <= (others => '0');
             else
                 min_count <= min_count + 1;
             end if;
         end if;
-    end process;
+    end if;
+end process;
 
     -- Outputs
     hours <= hr_count;
