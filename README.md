@@ -1,5 +1,5 @@
 # Team members
-Marek Šádek (responsible for ...)
+Marek Šádek (responsible for GitHub and Alarm)
 
 Matěj Ševčík (responsible for ...)
 
