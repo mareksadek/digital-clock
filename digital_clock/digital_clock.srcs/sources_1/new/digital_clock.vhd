@@ -34,7 +34,7 @@ architecture Behavioral of digital_clock is
 begin
 process(clk, rst)
 begin
-    if rst = '1' the
+    if rst = '1' then
         sec_count <= (others => '0');
         min_count <= (others => '0');
         hr_count  <= (others => '0');
