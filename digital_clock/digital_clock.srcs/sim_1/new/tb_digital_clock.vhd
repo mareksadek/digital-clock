@@ -50,7 +50,7 @@ architecture tb of tb_digital_clock is
     signal seconds     : std_logic_vector (5 downto 0);
     signal display     : std_logic_vector (6 downto 0);
 
-    constant TbPeriod : time := 1000 ns; -- ***EDIT*** Put right period here
+    constant TbPeriod : time := 1 ns; -- Put right period here
     signal TbClock : std_logic := '0';
     signal TbSimEnded : std_logic := '0';
 
@@ -72,29 +72,48 @@ begin
     -- Clock main signal
     clk <= TbClock;
 
-    stimuli : process
-    begin
-        -- ***EDIT*** Adapt initialization as needed
-        set_hours <= (others => '0');
-        set_minutes <= (others => '0');
+stimuli : process
+begin
+    -- Inicializace
+    set_hours   <= (others => '0');
+    set_minutes <= (others => '0');
+    rst         <= '0';
 
-        -- Reset generation
-        -- ***EDIT*** Check that rst is really your reset signal
-        rst <= '1';
-        wait for 100 ns;
-        rst <= '0';
-        wait for 100 ns;
+    -- Resetovací pulz
+    rst <= '1';
+    wait for 200 ns;
+    rst <= '0';
+    wait for 500 ns;
 
-        -- ***EDIT*** Add stimuli here
-        wait for 100 * TbPeriod;
+    -- Necháme běžet hodiny cca 1 sekundu (10 kroků po 100 ns)
+    wait for 1 us;
 
-        -- Stop the clock and hence terminate the simulation
-        TbSimEnded <= '1';
-        wait;
-    end process;
+    -- Nastavení hodin (set_hours = "01")
+    set_hours <= "01";
+    wait for TbPeriod;  -- zachytí náběžnou hranu
+    set_hours <= "00";
+    wait for 500 ns;
+
+    -- Nastavení minut (set_minutes = "01")
+    set_minutes <= "01";
+    wait for TbPeriod;
+    set_minutes <= "00";
+    wait for 500 ns;
+
+    -- Druhé nastavení hodin
+    set_hours <= "01";
+    wait for TbPeriod;
+    set_hours <= "00";
+
+    -- Necháme hodiny dále běžet cca 2 sekundy
+    wait for 2 us;
+
+    -- Ukončení simulace
+    TbSimEnded <= '1';
+    wait;
+end process;
 
 end tb;
-
 -- Configuration block below is required by some simulators. Usually no need to edit.
 
 configuration cfg_tb_digital_clock of tb_digital_clock is
