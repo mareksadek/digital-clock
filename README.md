@@ -26,5 +26,5 @@ Write descriptive text and put simulation screenshots of components you created 
 # References
 <li>Online VHDL Testbench Template Generator (lapinoo.net)</li>
 <li>Nexys A7 - Digilent Reference</li>
-<li>Constraint file for FPGA board Nexys-A7-50T</li>
+<li>Constraint file for FPGA board Nexys-A7-50T <a href="https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc"></a>a></li>
 <li>bin2seg</li>
