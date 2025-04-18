@@ -15,7 +15,7 @@ This project focuses on the design and implementation of a digital watch with st
 [Optional: Link to your short video presentation.]
 
 # Hardware description of demo application
-Describe your implementation. Put a descriptive top-level schematic of your application.
+FUnctionality of this project was tested on a fpga board Nexys-a7-50T. The board itself includes many various ports, buttons, 8 seven segment displays and many more which wasn't really much of our concern since the majority of our code was tested on 7 segment display. 
 
 # Software description
 Put flowchats/state diagrams of your algorithm(s) and direct links to source/testbench files in src and sim folders.
