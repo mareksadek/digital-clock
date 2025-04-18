@@ -24,7 +24,7 @@ Project can be separated into 3 different parts depending on what mode user desi
 Write descriptive text and put simulation screenshots of components you created during the project.
 
 # References
-Online VHDL Testbench Template Generator (lapinoo.net)
-Nexys A7 - Digilent Reference
-Constraint file for FPGA board Nexys-A7-50T
-bin2seg
+<li>Online VHDL Testbench Template Generator (lapinoo.net)</li>
+<li>Nexys A7 - Digilent Reference</li>
+<li>Constraint file for FPGA board Nexys-A7-50T</li>
+<li>bin2seg</li>
