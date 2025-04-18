@@ -3,18 +3,10 @@ Marek Šádek (responsible for GitHub and Alarm)
 
 Matěj Ševčík (responsible for ...)
 
-Denis Bandura (responsible for ...)
+Denis Bandura (responsible for coding stopwatch functionality and writing readme file)
 
 # Abstract
-An abstract is a short summary of your project, usually about a paragraph (6-7 sentences, 150-250 words) long. A well-written abstract serves multiple purposes: (a) an abstract lets readers get the gist or essence of your project quickly; (b) an abstract prepares readers to follow the detailed information, description, and results in your report; (c) and, later, an abstract helps readers remember key points from your project.
-
-The main contributions of the project are:
-
-• Marek Šádek for
-
-• Matěj Ševčík for
-
-• Denis Bandura for
+This project focuses on the design and implementation of a digital watch with stopwatch and alarm functionalities using VHDL (VHSIC Hardware Description Language) and an FPGA (Field-Programmable Gate Array) development board. The primary objective was to create a fully functional, real-time digital clock system that can display time, set an alarm, and operate a stopwatch. 
 
 [Photo(s) of your application with labels of individual parts.]
 
@@ -32,5 +24,5 @@ Put flowchats/state diagrams of your algorithm(s) and direct links to source/tes
 Write descriptive text and put simulation screenshots of components you created during the project.
 
 # References
-Put here the references and online tools you used.
-...
+Online VHDL Testbench Template Generator (lapinoo.net)
+Nexys A7 - Digilent Reference
