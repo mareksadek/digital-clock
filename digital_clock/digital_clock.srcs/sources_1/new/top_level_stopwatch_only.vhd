@@ -39,7 +39,8 @@ entity top_level is
     BTNU      : in    std_logic;                     --! Set hours +1
     BTND      : in    std_logic;                     --! Set hours -1
     BTNL      : in    std_logic;                     --! Set minutes +1
-    BTNR      : in    std_logic                      --! Set minutes -1
+    BTNR      : in    std_logic;                      --! Set minutes -1
+    SW0       : in    std_logic  
  
     
   );
@@ -49,18 +50,6 @@ end entity top_level;
 
 architecture behavioral of top_level is
   -- Component declaration for digital clock
-component digital_clock is
-    Port ( 
-        clk : in std_logic;
-        rst : in std_logic;
-        set_hours : in std_logic_vector(1 downto 0);
-        set_minutes : in std_logic_vector(1 downto 0);
-        hours : out std_logic_vector(5 downto 0);
-        minutes : out std_logic_vector(5 downto 0);
-        seconds : out std_logic_vector(5 downto 0);
-    );
-    
-end component;
 
   -- Component declaration for bin2seg
   component bin2seg is
@@ -70,6 +59,17 @@ end component;
       seg   : out   std_logic_vector(6 downto 0)
     );
   end component bin2seg;
+  
+  component stopwatch3 is
+    port (
+   
+      start : in    std_logic;
+      stp : in    std_logic;
+      rst : in    std_logic;
+      clk : in std_logic
+   
+    );
+  end component stopwatch3;
 
   -- Local signals for first counter: 4-bit @ 250 ms
   signal sig_en_250ms   : std_logic;                    --! Clock enable signal for 4-bit counter
@@ -80,35 +80,20 @@ end component;
 
 begin
 
-CLKK : digital_clock is
+CLKK : component stopwatch3
     port map (
-        start : in std_logic;
-        stp : in std_logic; 
-        clk : in std_logic;
-        rst : in std_logic;
-        set_hours : in std_logic_vector(1 downto 0);
-        set_minutes : in std_logic_vector(1 downto 0);
-        hours : out std_logic_vector(5 downto 0);
-        minutes : out std_logic_vector(5 downto 0);
-        seconds : out std_logic_vector(5 downto 0);
+        clk   => CLK100MHZ,
+        start => BTNL,
+        stp => BTNC,
+        rst => BTNR
     );
-  -- Component instantiation of 4-bit simple counter
-  counter0 : component counter
-    generic map (
-      n_bits => 4
-    )
-    port map (
-      clk   => CLK100MHZ,
-      start => BTNL,
-      stp => BTNC,
-      rst   => BTNR,
-      count => sig_count_4bit
-    );
+AN <= "00000000";  -- Enable only the first display (assuming active low)
+DP <= '1';         -- Turn off the decimal point (active low)
 
   -- Component instantiation of bin2seg
   display : component bin2seg
     port map (
-      clear  => BTNL,
+      clear  => BTND,
       bin    => sig_count_4bit,
       seg(6) => CA,
       seg(5) => CB,
@@ -119,27 +104,6 @@ CLKK : digital_clock is
       seg(0) => CG
     );
 
-  -- Turn off decimal point
-  DP <= '1';
 
-  -- Set display position
-  AN <= b"1111_1110";
-
- 
-
-
-    stopwatch1 : component stopwatch
-    generic map (
-      n_bits => 16
-    )
-    port map (
-
-        clk   => CLK100MHZ,
-        start => BTNL,
-        stp => BTNC,
-        rst => BTNR,
-        count => sig_count_4bit
-    );
-   
 
 end architecture behavioral;
