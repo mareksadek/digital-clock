@@ -52,7 +52,7 @@ architecture tb of tb_digital_clock is
     signal minutes           : std_logic_vector (5 downto 0);
     signal seconds           : std_logic_vector (5 downto 0);
 
-    constant TbPeriod : time := 1000 ns; -- ***EDIT*** Put right period here
+    constant TbPeriod : time := 10 ns; -- ***EDIT*** Put right period here
     signal TbClock : std_logic := '0';
     signal TbSimEnded : std_logic := '0';
 

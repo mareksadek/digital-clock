@@ -19,69 +19,65 @@
 ----------------------------------------------------------------------------------
 
 library ieee;
-  use ieee.std_logic_1164.all;
-
--------------------------------------------------
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity top_level is
   port (
-    CLK100MHZ : in    std_logic;                     --! Main clock
-    LED       : out   std_logic_vector(2 downto 0); --! Show 16-bit counter value
-    CA        : out   std_logic;                     --! Cathode of segment A
-    CB        : out   std_logic;                     --! Cathode of segment B
-    CC        : out   std_logic;                     --! Cathode of segment C
-    CD        : out   std_logic;                     --! Cathode of segment D
-    CE        : out   std_logic;                     --! Cathode of segment E
-    CF        : out   std_logic;                     --! Cathode of segment F
-    CG        : out   std_logic;                     --! Cathode of segment G
-    DP        : out   std_logic;                     --! Decimal point
-    AN        : out   std_logic_vector(7 downto 0);  --! Common anodes of all on-board displays
-    BTNC      : in    std_logic;                     --! Synchronous reset
-    BTNU      : in    std_logic;                     --! Set hours +1
-    BTND      : in    std_logic;                     --! Set hours -1
-    BTNL      : in    std_logic;                     --! Set minutes +1
-    BTNR      : in    std_logic                      --! Set minutes -1
- 
-    
+    CLK100MHZ : in    std_logic;
+    CA        : out   std_logic;
+    CB        : out   std_logic;
+    CC        : out   std_logic;
+    CD        : out   std_logic;
+    CE        : out   std_logic;
+    CF        : out   std_logic;
+    CG        : out   std_logic;
+    DP        : out   std_logic;
+    AN        : out   std_logic_vector(7 downto 0);
+    BTNC      : in    std_logic;
+    BTNU      : in    std_logic_vector(1 downto 0);
+    BTND      : in    std_logic_vector(1 downto 0);
+    BTNL      : in    std_logic_vector(1 downto 0);
+    BTNR      : in    std_logic_vector(1 downto 0)
   );
 end entity top_level;
 
--------------------------------------------------
-
 architecture behavioral of top_level is
-  -- Component declaration for digital clock
-component digital_clock is
-    Port ( 
-        clk : in std_logic;
-        rst : in std_logic;
-        set_hours_plus : in std_logic_vector(1 downto 0);
-        set_hours_minus : in std_logic_vector(1 downto 0);
-        set_minutes_plus : in std_logic_vector(1 downto 0);
-        set_minutes_minus : in std_logic_vector(1 downto 0);
-        hours : out std_logic_vector(5 downto 0);
-        minutes : out std_logic_vector(5 downto 0);
-        seconds : out std_logic_vector(5 downto 0));
-    
-end component;
 
-  -- Component declaration for bin2seg
+  -- Component declarations
+  component digital_clock is
+    port (
+      clk               : in std_logic;
+      rst               : in std_logic;
+      set_hours_plus    : in std_logic_vector(1 downto 0);
+      set_hours_minus   : in std_logic_vector(1 downto 0);
+      set_minutes_plus  : in std_logic_vector(1 downto 0);
+      set_minutes_minus : in std_logic_vector(1 downto 0);
+      hours             : out std_logic_vector(5 downto 0);
+      minutes           : out std_logic_vector(5 downto 0);
+      seconds           : out std_logic_vector(5 downto 0)
+    );
+  end component;
+
   component bin2seg is
     port (
-      clear : in    std_logic;
-      bin   : in    std_logic_vector(3 downto 0);
-      seg   : out   std_logic_vector(6 downto 0)
+      clear : in std_logic;
+      bin   : in std_logic_vector(3 downto 0);
+      seg   : out std_logic_vector(6 downto 0)
     );
-  end component bin2seg;
+  end component;
 
-  -- Local signals for first counter: 4-bit @ 250 ms
-  signal sig_en_250ms   : std_logic;                    --! Clock enable signal for 4-bit counter
-  signal sig_count_4bit : std_logic_vector(3 downto 0); --! 4-bit counter value
-
-  -- Local signal for second counter: 16-bit @ 2 ms
-  signal sig_en_2ms : std_logic; --! Clock enable signal for 16-bit counter
+  -- Internal signals
+  signal sig_hours    : std_logic_vector(5 downto 0);
+  signal sig_minutes  : std_logic_vector(5 downto 0);
+  signal sig_seconds  : std_logic_vector(5 downto 0);
+  signal seg_out      : std_logic_vector(6 downto 0);
+  signal digit_bin_hours    : std_logic_vector(3 downto 0);
+  signal digit_bin_min    : std_logic_vector(3 downto 0);
+  signal digit_bin_sec    : std_logic_vector(3 downto 0);  -- For one digit
 
 begin
-  -- Instantiate digital_clock
+
   -- Instantiate digital clock
   clock_inst : digital_clock
     port map (
@@ -95,29 +91,31 @@ begin
       minutes           => sig_minutes,
       seconds           => sig_seconds
     );
-  
-  -- Component instantiation of bin2seg
-  display : component bin2seg
+
+  -- Show lower nibble of seconds on 7-seg display
+  digit_bin_sec <= sig_seconds(3 downto 0);
+
+      -- Instantiate bin2seg for minutes
+  display_inst_seconds : bin2seg
     port map (
-      clear  => BTNC,
-      bin    => sig_count_4bit,
-      seg(6) => CA,
-      seg(5) => CB,
-      seg(4) => CC,
-      seg(3) => CD,
-      seg(2) => CE,
-      seg(1) => CF,
-      seg(0) => CG
+      clear => BTNC,
+      bin   => digit_bin_sec,
+      seg   => seg_out
     );
 
-  -- Turn off decimal point
+  -- Assign 7-segment outputs
+  CA <= seg_out(6);
+  CB <= seg_out(5);
+  CC <= seg_out(4);
+  CD <= seg_out(3);
+  CE <= seg_out(2);
+  CF <= seg_out(1);
+  CG <= seg_out(0);
+
+  -- Disable decimal point
   DP <= '1';
 
-  -- Set display position
-  AN <= b"1111_1110";
-
-
-  -- Component instantiation of 16-bit simple counter
-
-
+  -- Enable only one digit (rightmost)
+  AN <= "11110000";
+  
 end architecture behavioral;
