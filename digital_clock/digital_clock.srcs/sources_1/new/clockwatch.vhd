@@ -4,20 +4,19 @@ use ieee.std_logic_unsigned.all;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 
-entity main is
+entity stopwatch is
     Port ( start : in  STD_LOGIC;
-           stop : in  STD_LOGIC;
-           reset : in  STD_LOGIC;
-           clock : in  STD_LOGIC;
+           stp : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           clk : in  STD_LOGIC;
            output : out  STD_LOGIC_VECTOR (7 downto 0);
            hours : out std_logic_vector(5 downto 0);
            minutes : out std_logic_vector(5 downto 0);
            seconds : out std_logic_vector(5 downto 0);
-           display: out std_logic_vector(6 downto 0)
            );
-end main;
+end stopwatch;
 
-architecture Behavioral of main is
+architecture Behavioral of stopwatch is
     signal sec_count   : std_logic_vector(5 downto 0) := "000000"; -- seconds
     signal min_count   : std_logic_vector(5 downto 0) := "000000"; -- minutes
     signal hr_count    : std_logic_vector(5 downto 0) := "000000"; -- hours
@@ -43,7 +42,7 @@ begin
 					output <= temp;
 					ns <= running;
 				end if; --new value is on output and the clock goes from first state (idle) to the second one (running) 
-				if (stop = '1') then 
+				if (stp = '1') then 
 					output <= temp;
 					ns <= ps;
 				end if; --(after pressing the button, current output is set and the clock stays at the current state (running)
@@ -53,11 +52,11 @@ begin
 					output <= temp;
 					ns <= ps;
 				end if; --when start button is pressed, clock starts counting and stays in the current state (running)
-				if (stop = '1') then 
+				if (stp = '1') then 
 					output <= temp;
 					ns <= paused;
 				end if; --when stop button is pressed, output is paused and the state is set to pause
-				if (reset = '1') then 
+				if (rst = '1') then 
 					temp <= "00000000";
 					output <= temp;
 					ns <= idle;
@@ -68,11 +67,11 @@ begin
 					output <= temp;
 					ns <= running;
 				end if; --when start button is pressed again, clock starts counting again and the clock returns to the state running
-				if (stop = '1') then 
+				if (stp = '1') then 
 					output <= temp;
 					ns <= ps;
 				end if; --when stop is pressed again, clock pauses
-				if (reset = '1') then 
+				if (rst = '1') then 
 					temp <= "00000000";
 					output <= temp;
 					ns <= idle;
@@ -81,11 +80,11 @@ begin
 				null;
 		end case;
 	end if;
-	 if reset = '1' then
+	 if rst = '1' then
             sec_count <= "000000";
             min_count <= "000000";
             hr_count  <= "000000";
-        elsif clock = '1' and clock'event then  -- Change to hour signal
+        elsif clk = '1' and clk'event then  -- Change to hour signal
             -- Incrementation of seconds
             if sec_count = "111011" then  -- 59 seconds
                 sec_count <= "000000";
