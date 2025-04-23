@@ -54,13 +54,13 @@ component digital_clock is
     Port ( 
         clk : in std_logic;
         rst : in std_logic;
-        set_hours : in std_logic_vector(1 downto 0);
-        set_minutes : in std_logic_vector(1 downto 0);
+        set_hours_plus : in std_logic_vector(1 downto 0);
+        set_hours_minus : in std_logic_vector(1 downto 0);
+        set_minutes_plus : in std_logic_vector(1 downto 0);
+        set_minutes_minus : in std_logic_vector(1 downto 0);
         hours : out std_logic_vector(5 downto 0);
         minutes : out std_logic_vector(5 downto 0);
-        seconds : out std_logic_vector(5 downto 0);
-        display: out std_logic_vector(6 downto 0)
-    );
+        seconds : out std_logic_vector(5 downto 0));
     
 end component;
 
@@ -81,30 +81,21 @@ end component;
   signal sig_en_2ms : std_logic; --! Clock enable signal for 16-bit counter
 
 begin
-
-CLKK : digital_clock is
-    port map ( 
-        clk : in std_logic;
-        rst : in std_logic;
-        set_hours : in std_logic_vector(1 downto 0);
-        set_minutes : in std_logic_vector(1 downto 0);
-        hours : out std_logic_vector(5 downto 0);
-        minutes : out std_logic_vector(5 downto 0);
-        seconds : out std_logic_vector(5 downto 0);
-        display: out std_logic_vector(6 downto 0)
-    );
-  -- Component instantiation of 4-bit simple counter
-  counter0 : component counter
-    generic map (
-      n_bits => 4
-    )
+  -- Instantiate digital_clock
+  -- Instantiate digital clock
+  clock_inst : digital_clock
     port map (
-      clk   => CLK100MHZ,
-      rst   => BTNC,
-      en    => sig_en_250ms,
-      count => sig_count_4bit
+      clk               => CLK100MHZ,
+      rst               => BTNC,
+      set_hours_plus    => BTNU,
+      set_hours_minus   => BTND,
+      set_minutes_plus  => BTNL,
+      set_minutes_minus => BTNR,
+      hours             => sig_hours,
+      minutes           => sig_minutes,
+      seconds           => sig_seconds
     );
-
+  
   -- Component instantiation of bin2seg
   display : component bin2seg
     port map (
@@ -125,27 +116,8 @@ CLKK : digital_clock is
   -- Set display position
   AN <= b"1111_1110";
 
-  -- Component instantiation of clock enable for 2 ms
-  clk_en1 : component clock_en
-    generic map (
-      n_periods => 200_000
-    )
-    port map (
-      clk   => CLK100MHZ,
-      rst   => BTNC,
-      pulse => sig_en_2ms
-    );
 
   -- Component instantiation of 16-bit simple counter
-  counter1 : component counter
-    generic map (
-      n_bits => 16
-    )
-    port map (
-      clk   => CLK100MHZ,
-      rst   => BTNC,
-      en    => sig_en_2ms,
-      count => LED
-    );
+
 
 end architecture behavioral;
