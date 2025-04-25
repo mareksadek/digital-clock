@@ -20,72 +20,93 @@ architecture Behavioral of digital_clock is
     signal sec_count : std_logic_vector(5 downto 0) := (others => '0');
     signal min_count : std_logic_vector(5 downto 0) := (others => '0');
     signal hr_count  : std_logic_vector(5 downto 0) := (others => '0');
+    
+    signal counter : unsigned(26 downto 0) := (others => '0');  -- 27-bit counter
+    signal one_sec_tick : std_logic := '0';
+    
 begin
 
-process(clk, rst)
-begin
-    if rst = '1' then
-        sec_count <= (others => '0');
-        min_count <= (others => '0');
-        hr_count  <= (others => '0');
+    -- Frequency divider: generates a 1Hz tick from 100MHz
+    process(clk, rst)
+    begin
+        if rst = '1' then
+            counter <= (others => '0');
+            one_sec_tick <= '0';
+        elsif rising_edge(clk) then
+            if counter = 99999999 then  -- 100M - 1
+                counter <= (others => '0');
+                one_sec_tick <= '1';
+            else
+                counter <= counter + 1;
+                one_sec_tick <= '0';
+            end if;
+        end if;
+    end process;
 
-    elsif rising_edge(clk) then
-
-        -- Time update
-        if sec_count = std_logic_vector(to_unsigned(59, 6)) then
+    process(clk, rst)
+    begin
+        if rst = '1' then
             sec_count <= (others => '0');
-            if min_count = std_logic_vector(to_unsigned(59, 6)) then
-                min_count <= (others => '0');
+            min_count <= (others => '0');
+            hr_count  <= (others => '0');
+        elsif rising_edge(clk) then
+            -- One second tick
+            if one_sec_tick = '1' then
+                if sec_count = std_logic_vector(to_unsigned(59, 6)) then
+                    sec_count <= (others => '0');
+                    if min_count = std_logic_vector(to_unsigned(59, 6)) then
+                        min_count <= (others => '0');
+                        if hr_count = std_logic_vector(to_unsigned(23, 6)) then
+                            hr_count <= (others => '0');
+                        else
+                            hr_count <= std_logic_vector(unsigned(hr_count) + 1);
+                        end if;
+                    else
+                        min_count <= std_logic_vector(unsigned(min_count) + 1);
+                    end if;
+                else
+                    sec_count <= std_logic_vector(unsigned(sec_count) + 1);
+                end if;
+            end if;
+
+            -- Set Hours plus
+            if set_hours_plus = "01" then
                 if hr_count = std_logic_vector(to_unsigned(23, 6)) then
                     hr_count <= (others => '0');
                 else
                     hr_count <= std_logic_vector(unsigned(hr_count) + 1);
                 end if;
-            else
-                min_count <= std_logic_vector(unsigned(min_count) + 1);
             end if;
-        else
-            sec_count <= std_logic_vector(unsigned(sec_count) + 1);
-        end if;
 
-        -- Set Hours plus
-        if set_hours_plus = "01" then
-            if hr_count = std_logic_vector(to_unsigned(23, 6)) then
-                hr_count <= (others => '0');
-            else
-                hr_count <= std_logic_vector(unsigned(hr_count) + 1);
+            -- Set Hours minus
+            if set_hours_minus = "01" then
+                if unsigned(hr_count) = 0 then
+                    hr_count <= std_logic_vector(to_unsigned(23, 6));
+                else
+                    hr_count <= std_logic_vector(unsigned(hr_count) - 1);
+                end if;
             end if;
-        end if;
 
-        -- Set Hours minus
-        if set_hours_minus = "01" then
-            if unsigned(hr_count) = 0 then
-                hr_count <= std_logic_vector(to_unsigned(23, 6));
-            else
-                hr_count <= std_logic_vector(unsigned(hr_count) - 1);
+            -- Set Minutes plus
+            if set_minutes_plus = "01" then
+                if min_count = std_logic_vector(to_unsigned(59, 6)) then
+                    min_count <= (others => '0');
+                else
+                    min_count <= std_logic_vector(unsigned(min_count) + 1);
+                end if;
             end if;
-        end if;
 
-        -- Set Minutes plus
-        if set_minutes_plus = "01" then
-            if min_count = std_logic_vector(to_unsigned(59, 6)) then
-                min_count <= (others => '0');
-            else
-                min_count <= std_logic_vector(unsigned(min_count) + 1);
+            -- Set Minutes minus
+            if set_minutes_minus = "01" then
+                if unsigned(min_count) = 0 then
+                    min_count <= std_logic_vector(to_unsigned(59, 6));
+                else
+                    min_count <= std_logic_vector(unsigned(min_count) - 1);
+                end if;
             end if;
-        end if;
 
-        -- Set Minutes minus
-        if set_minutes_minus = "01" then
-            if unsigned(min_count) = 0 then
-                min_count <= std_logic_vector(to_unsigned(59, 6));
-            else
-                min_count <= std_logic_vector(unsigned(min_count) - 1);
-            end if;
         end if;
-
-    end if;
-end process;
+    end process;
 
     -- Outputs
     hours   <= hr_count;
