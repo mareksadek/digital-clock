@@ -3,7 +3,7 @@ Marek Šádek (responsible for GitHub and Alarm)
 
 Matěj Ševčík (responsible for ...)
 
-Denis Bandura (responsible for coding stopwatch and writing readme file)
+Denis Bandura (helping with stopwatch and readme file)
 
 # Abstract
 This project focuses on the design and implementation of a digital watch with stopwatch and alarm functionalities using VHDL (VHSIC Hardware Description Language) and an FPGA (Field-Programmable Gate Array) development board. The primary objective was to create a fully functional digital clock system that can display time, set an alarm, and operate a stopwatch. 
@@ -23,14 +23,14 @@ Project can be separated into 3 different parts depending on what mode user desi
 # Schematic
 
 # Component(s) used and simulations
-<li>**bin2seg.vhd**</li> - primary focus of this code was to translate binary number to decimal, so the 7-segment on fpga can display decimal numbers. As the 7-segment display consists of 7 segments that can display numbers or letters based on the chosen segments. The conponent was slightly upgraded, but in the end, we used code from school assignment.
-<li>**digital_clock.vhd**</li> - 
-<li>**stopwatch.vhd**</li> - this component's behaviour should let user measure time intervals, typically in seconds or minutes. It allows user to start, stop and reset the timing, so the user can track activity or event. 
-<li>**alarm.vhd**</li> - alarm's function is for diode to lighten up in case where specific time event occurs. Using digital clock, some specific time frame is set, and when this time frame is reached, control diode will warm user of evnet's occurance.
+<li>bin2seg.vhd</li> **primary focus of this code was to translate binary number to decimal, so the 7-segment on fpga can display decimal numbers. As the 7-segment display consists of 7 segments that can display numbers or letters based on the chosen segments. The conponent was slightly upgraded, but in the end, we used code from school assignment.**
+<li>digital_clock.vhd</li> 
+<li>stopwatch.vhd</li> **this component's behaviour should let user measure time intervals, typically in seconds or minutes. It allows user to start, stop and reset the timing, so the user can track activity or event. **
+<li>alarm.vhd</li> **alarm's function is for diode to lighten up in case where specific time event occurs. Using digital clock, some specific time frame is set, and when this time frame is reached, control diode will warm user of evnet's occurance.**
 
 
 # References
-<li>Online VHDL Testbench Template Generator (lapinoo.net)</li>
-<li>Nexys A7 - Digilent Reference</li>
-<li>Constraint file for FPGA board Nexys-A7-50T<a href="https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual">reference manual</a>, <a href="https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc">constraint file</a></li>
-<li>bin2seg</li> 
+<li>Online VHDL Testbench Template Generator (lapinoo.net), <a href="https://vhdl.lapinoo.net/">website</a></li>
+<li>Nexys A7 - Digilent Reference, <a href="https://digilent.com/reference/programmable-logic/nexys-a7/reference-manual">reference manual</a></li>
+<li>Constraint file for FPGA board Nexys-A7-50T, <a href="https://raw.githubusercontent.com/Digilent/digilent-xdc/master/Nexys-A7-50T-Master.xdc">constraint file</a></li>
+<li>bin2seg <a href="https://github.com/tomas-fryza/vhdl-labs/blob/master/solutions/lab3-segment/bin2seg.vhd">bin2seg.vhd</a></li> 
