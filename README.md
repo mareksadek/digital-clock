@@ -26,7 +26,10 @@ Project can be separated into 3 different parts depending on what mode user desi
 <li>bin2seg.vhd</li> primary focus of this code was to translate binary number to decimal, so the 7-segment on fpga can display decimal numbers. As the 7-segment display consists of 7 segments that can display numbers or letters based on the chosen segments. The conponent was slightly upgraded, but in the end, we used code from school assignment.
 <li>digital_clock.vhd</li> 
 <li>stopwatch.vhd</li> this component's behaviour should let user measure time intervals, typically in seconds or minutes. It allows user to start, stop and reset the timing, so the user can track activity or event. 
-![Simulation of counting numbers in stopwatch](https://github.com/mareksadek/digital-clock/blob/main/digital_clock/stopwatch_screenshot.PNG)
+
+Inline-style: 
+![Simulation of ticking stopwatch in vivado](https://https://github.com/mareksadek/digital-clock/blob/main/digital_clock/stopwatch_screenshot.PNG )
+
 <li>alarm.vhd</li> alarm's function is for diode to lighten up in case where specific time event occurs. Using digital clock, some specific time frame is set, and when this time frame is reached, control diode will warm user of evnet's occurance.
 
 
