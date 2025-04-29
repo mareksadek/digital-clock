@@ -36,9 +36,9 @@ architecture tb of tb_main is
 
     component main
         port (start   : in std_logic;
-              stop    : in std_logic;
-              reset   : in std_logic;
-              clock   : in std_logic;
+              stp    : in std_logic;
+              rst   : in std_logic;
+              clk   : in std_logic;
               output  : out std_logic_vector (7 downto 0);
               hours   : out std_logic_vector (5 downto 0);
               minutes : out std_logic_vector (5 downto 0);
@@ -47,9 +47,9 @@ architecture tb of tb_main is
     end component;
 
     signal start   : std_logic;
-    signal stop    : std_logic;
-    signal reset   : std_logic;
-    signal clock   : std_logic;
+    signal stp    : std_logic;
+    signal rst   : std_logic;
+    signal clk   : std_logic;
     signal output  : std_logic_vector (7 downto 0);
     signal hours   : std_logic_vector (5 downto 0);
     signal minutes : std_logic_vector (5 downto 0);
@@ -64,9 +64,9 @@ begin
 
     dut : main
     port map (start   => start,
-              stop    => stop,
-              reset   => reset,
-              clock   => clock,
+              stp    => stp,
+              rst   => rst,
+              clk   => clk,
               output  => output,
               hours   => hours,
               minutes => minutes,
@@ -77,15 +77,15 @@ begin
     TbClock <= not TbClock after TbPeriod/2 when TbSimEnded /= '1' else '0';
 
     -- ***EDIT*** Check that clock is really your main clock signal
-    clock <= TbClock;
+    clk <= TbClock;
 
       stimuli : process
     variable wait_time : time := 100 ms;
 begin
     -- Initially reset the system
-    reset <= '1';
+    rst <= '1';
     wait for 100 ns;  -- Wait for reset to take effect
-    reset <= '0';
+    rst <= '0';
     wait for 100 ns;
 
     -- Start the stopwatch
@@ -95,9 +95,9 @@ begin
     wait for 100 ns;
 
     -- Stop the stopwatch
-    stop <= '1';
+    stp <= '1';
     wait for 100 ns;
-    stop <= '0';
+    stp <= '0';
     wait for 100 ns;
 
     -- Start the stopwatch again
@@ -107,15 +107,15 @@ begin
     wait for 100 ns;
 
     -- Stop the stopwatch
-    stop <= '1';
+    stp <= '1';
     wait for 100 ns;
-    stop <= '0';
+    stp <= '0';
     wait for 100 ns;
 
     -- Reset the stopwatch
-    reset <= '1';
+    rst <= '1';
     wait for 100 ns;
-    reset <= '0';
+    rst <= '0';
 
     -- End simulation
     wait for 100 ns;

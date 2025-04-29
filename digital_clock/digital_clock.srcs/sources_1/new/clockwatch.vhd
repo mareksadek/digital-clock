@@ -12,7 +12,7 @@ entity stopwatch is
            output : out  STD_LOGIC_VECTOR (7 downto 0);
            hours : out std_logic_vector(5 downto 0);
            minutes : out std_logic_vector(5 downto 0);
-           seconds : out std_logic_vector(5 downto 0);
+           seconds : out std_logic_vector(5 downto 0)
            );
 end stopwatch;
 
@@ -29,10 +29,10 @@ signal temp : std_logic_vector (7 downto 0) := "00000000";
 --begin process (start,stop,reset)
  
 begin
-SEQ:process(clock)
+SEQ:process(clk)
 
 begin
-	if (rising_edge(clock)) then
+	if (rising_edge(clk)) then
 		ps <= ns;
 		--with every rising edge, state is switched to the nexst state (ns)
 		case ps is 
