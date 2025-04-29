@@ -9,7 +9,7 @@ Denis Bandura (responsible for stopwatch and readme file)
 This project focuses on the design and implementation of a digital watch with stopwatch and alarm functionalities using VHDL (VHSIC Hardware Description Language) and an FPGA (Field-Programmable Gate Array) development board. The primary objective was to create a fully functional digital clock system that can display time, set an alarm, and operate a stopwatch. 
 
 # Schematic
-![Schematic](https://github.com/mareksadek/digital-clock/blob/main/digital_clock/scheme.png ) 
+![top_level schematic](https://github.com/mareksadek/digital-clock/blob/main/digital_clock/scheme.png ) 
 
 # Hardware description of demo application
 Functionality of this project was tested on a fpga board Nexys-a7-50T. The board itself includes many various ports, buttons, 8 seven segment displays and many more which wasn't really much of our concern since the majority of our code was tested on 7 segment display. Next, we will use 3 butoons on fpga board: BTNC, BTNR and BTND. Each buttons should have a different function depending on is their current level of operation. Current level of operation means that each button can either operate as option for choosing a different mode (clock, alarm and stopwatch), or as a function inside of particular mode. For example, in order for stopwatch to properly work, we need start button for assuring start of the counting, pause button for pausing counting and reset button for reseting the whole operation so the clockwatch can operate again. These functions can be in various form applied to alarm and digital clock as well. 
