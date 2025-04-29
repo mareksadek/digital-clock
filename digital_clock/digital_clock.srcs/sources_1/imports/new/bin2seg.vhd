@@ -3,6 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity bin2seg is
     port (
+        clear : in  std_logic;
         bin   : in std_logic_vector(3 downto 0);  -- 4-bit binary input
         seg   : out std_logic_vector(6 downto 0)  -- 7-segment display output (a to g)
     );
