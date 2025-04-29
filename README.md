@@ -1,9 +1,9 @@
 # Team members
 Marek Šádek (responsible for GitHub and Alarm)
 
-Matěj Ševčík (responsible for ...)
+Matěj Ševčík (responsible for inicializing digital_clock, top_level, top_level schematic)
 
-Denis Bandura (helping with stopwatch and readme file)
+Denis Bandura (responsible for stopwatch and readme file)
 
 # Abstract
 This project focuses on the design and implementation of a digital watch with stopwatch and alarm functionalities using VHDL (VHSIC Hardware Description Language) and an FPGA (Field-Programmable Gate Array) development board. The primary objective was to create a fully functional digital clock system that can display time, set an alarm, and operate a stopwatch. 
