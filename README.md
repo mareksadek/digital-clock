@@ -23,11 +23,11 @@ Project can be separated into 3 different parts depending on what mode user desi
 
 ![Digital_clok](https://github.com/mareksadek/digital-clock/blob/main/digital_clock/dig_clock.png )
 
-<li>stopwatch.vhd</li> this component's behaviour should let user measure time intervals, typically in seconds or minutes. It allows user to start, stop and reset the timing, so the user can track activity or event. 
+<li>stopwatch.vhd</li> This component's behaviour should let user measure time intervals, typically in seconds or minutes. It allows user to start, stop and reset the timing, so the user can track activity or event. 
  
 ![Simulation of ticking stopwatch in vivado](https://github.com/mareksadek/digital-clock/blob/main/digital_clock/stopwatch_screenshot.PNG )
 
-<li>alarm.vhd</li> alarm's function is for diode to lighten up in case where specific time event occurs. Using digital clock, some specific time frame is set, and when this time frame is reached, control diode will warm user of evnet's occurance.
+<li>alarm.vhd</li> Alarm's function is for diode to lighten up in case where specific time event occurs. Using digital clock, some specific time frame is set, and when this time frame is reached, control diode will warm user of evnet's occurance.
 We did not provide alarm function with simulation source as there is no point in simulating this component
 
 ![Digital_clock](https://github.com/mareksadek/digital-clock/blob/main/digital_clock/diode.jpg )
