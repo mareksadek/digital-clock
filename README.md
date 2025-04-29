@@ -19,7 +19,7 @@ Project can be separated into 3 different parts depending on what mode user desi
 
 # Component(s) used and simulations
 <li>bin2seg.vhd</li> primary focus of this code was to translate binary number to decimal, so the 7-segment on fpga can display decimal numbers. As the 7-segment display consists of 7 segments that can display numbers or letters based on the chosen segments. The conponent was slightly upgraded, but in the end, we used code from school assignment.
-<li>digital_clock.vhd</li> 
+<li>digital_clock.vhd</li> This VHDL code implements a basic digital clock that counts hours, minutes, and seconds from 00:00:00 to 23:59:59. It resets the time to zero when the rst signal is high. Time counting is triggered by the rising edge of the clock signal. An LED blinks approximately every five seconds, based on a counter assuming a 100 MHz input clock. There is also a basic alarm mechanism where the alarm_triggered signal is set when alarm_enabled is high. The outputs include current time and the blinking LED.
 
 ![Digital_clok](https://github.com/mareksadek/digital-clock/blob/main/digital_clock/dig_clock.png )
 
