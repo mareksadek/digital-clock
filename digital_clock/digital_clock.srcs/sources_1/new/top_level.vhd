@@ -74,7 +74,7 @@ begin
   DP <= '1';
 
   -- Display enable - použijeme jen první display
-  AN <= "11111110";
+  AN <= "11110000";
 
 end architecture;
 
